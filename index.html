@@ -1,0 +1,2495 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b1020" />
+  <title>BAC Learning Space Premium</title>
+  <style>
+    :root {
+      --bg: #09111f;
+      --bg-2: #0d1728;
+      --panel: rgba(12, 20, 36, 0.76);
+      --panel-strong: rgba(10, 16, 30, 0.92);
+      --panel-soft: rgba(255,255,255,.05);
+      --line: rgba(255,255,255,.09);
+      --line-strong: rgba(255,255,255,.16);
+      --text: #ecf2ff;
+      --muted: #9caecc;
+      --primary: #7c9cff;
+      --primary-2: #9f7cff;
+      --accent: #2fe0c9;
+      --success: #63f3b7;
+      --warn: #ffc870;
+      --danger: #ff8e8e;
+      --shadow-lg: 0 24px 80px rgba(0,0,0,.45);
+      --shadow-md: 0 14px 40px rgba(0,0,0,.28);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 18px;
+      --radius-sm: 14px;
+      --maxw: 1480px;
+      --sidebar-w: 280px;
+      --focus: 0 0 0 3px rgba(124,156,255,.25);
+    }
+
+    body[data-theme="light"] {
+      --bg: #eef3ff;
+      --bg-2: #f6f8ff;
+      --panel: rgba(255,255,255,.82);
+      --panel-strong: rgba(255,255,255,.94);
+      --panel-soft: rgba(15,23,42,.05);
+      --line: rgba(15,23,42,.10);
+      --line-strong: rgba(15,23,42,.14);
+      --text: #17233c;
+      --muted: #62718d;
+      --shadow-lg: 0 24px 80px rgba(53, 70, 111, .12);
+      --shadow-md: 0 14px 40px rgba(53, 70, 111, .10);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(124,156,255,.18), transparent 22%),
+        radial-gradient(circle at 100% 0%, rgba(159,124,255,.16), transparent 22%),
+        radial-gradient(circle at 50% 100%, rgba(47,224,201,.10), transparent 25%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,.02));
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    button, input, textarea, select { font: inherit; }
+    button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+      outline: none;
+      box-shadow: var(--focus);
+    }
+
+    .hidden { display: none !important; }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .shell {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 18px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .premium-bar,
+    .sidebar,
+    .panel,
+    .card,
+    .subject-card,
+    .lesson-card,
+    .tab-panel,
+    .toast,
+    .modal-card,
+    .calendar-day,
+    .progress-card,
+    .metric,
+    .pomodoro-ring {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .premium-bar {
+      position: sticky;
+      top: 10px;
+      z-index: 30;
+      border-radius: 24px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .logo {
+      width: 54px;
+      height: 54px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      color: white;
+      font-weight: 900;
+      letter-spacing: .03em;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .logo::after {
+      content: "";
+      position: absolute;
+      inset: -30% 45% 35% -20%;
+      background: rgba(255,255,255,.25);
+      filter: blur(10px);
+      transform: rotate(24deg);
+    }
+
+    .brand-copy h1 {
+      margin: 0;
+      font-size: 1.06rem;
+      line-height: 1.1;
+      letter-spacing: -.02em;
+    }
+
+    .brand-copy p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: .88rem;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .chip, .btn, .mini-btn, .nav-link {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      color: var(--text);
+      border-radius: 16px;
+      transition: transform .2s ease, border-color .2s ease, background .2s ease, opacity .2s ease;
+    }
+
+    .chip, .mini-btn {
+      padding: 10px 12px;
+      min-height: 44px;
+    }
+
+    .btn {
+      padding: 13px 16px;
+      min-height: 48px;
+      cursor: pointer;
+    }
+
+    .btn:hover, .mini-btn:hover, .nav-link:hover, .subject-card:hover, .lesson-card:hover, .tab:hover {
+      transform: translateY(-1px);
+      border-color: var(--line-strong);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      color: #fff;
+      border: 0;
+      font-weight: 700;
+      box-shadow: 0 16px 34px rgba(124,156,255,.26);
+    }
+
+    .btn-secondary { background: rgba(255,255,255,.06); }
+    .btn-ghost { background: transparent; border-style: dashed; color: var(--muted); }
+    .btn-danger { background: rgba(255,142,142,.10); color: #ffdada; border-color: rgba(255,142,142,.18); }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+
+    .sidebar {
+      border-radius: 28px;
+      padding: 18px;
+      position: sticky;
+      top: 96px;
+      align-self: start;
+      display: none;
+      gap: 18px;
+    }
+
+    .sidebar-section { display: grid; gap: 10px; }
+    .sidebar-title {
+      font-size: .77rem;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .nav-group { display: grid; gap: 8px; }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .nav-link.active {
+      background: linear-gradient(135deg, rgba(124,156,255,.16), rgba(47,224,201,.10));
+      border-color: rgba(124,156,255,.28);
+    }
+
+    .nav-link .icon {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: rgba(255,255,255,.06);
+    }
+
+    .main { display: grid; gap: 18px; }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border-radius: 32px;
+      padding: 24px;
+      background:
+        linear-gradient(145deg, rgba(124,156,255,.18), rgba(159,124,255,.08) 38%, rgba(47,224,201,.08) 100%),
+        var(--panel-strong);
+      border: 1px solid rgba(255,255,255,.09);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      filter: blur(10px);
+    }
+
+    .hero::before {
+      width: 280px;
+      height: 280px;
+      right: -80px;
+      top: -70px;
+      background: radial-gradient(circle, rgba(124,156,255,.30), transparent 65%);
+      animation: floatOrb 8s ease-in-out infinite;
+    }
+
+    .hero::after {
+      width: 210px;
+      height: 210px;
+      left: -60px;
+      bottom: -90px;
+      background: radial-gradient(circle, rgba(47,224,201,.22), transparent 65%);
+      animation: floatOrb 11s ease-in-out infinite reverse;
+    }
+
+    @keyframes floatOrb {
+      0%, 100% { transform: translate3d(0,0,0); }
+      50% { transform: translate3d(0,-12px,0); }
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.10);
+      color: #dfe8ff;
+      font-size: .82rem;
+      margin-bottom: 14px;
+    }
+
+    .hero h2 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.7rem);
+      line-height: .98;
+      letter-spacing: -.05em;
+      max-width: 12ch;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero p {
+      margin: 14px 0 0;
+      color: var(--muted);
+      max-width: 72ch;
+      line-height: 1.7;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-actions, .toolbar, .inline-actions, .row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .hero-actions { margin-top: 18px; }
+
+    .dashboard {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: 1fr;
+    }
+
+    .metrics {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .metric {
+      padding: 16px;
+      border-radius: 22px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .metric::after {
+      content: "";
+      position: absolute;
+      inset: auto -26px -26px auto;
+      width: 92px;
+      height: 92px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,.08), transparent 60%);
+    }
+
+    .metric .label {
+      font-size: .8rem;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .metric .value {
+      font-size: 1.8rem;
+      font-weight: 900;
+      letter-spacing: -.04em;
+    }
+
+    .metric .sub {
+      margin-top: 8px;
+      font-size: .86rem;
+      color: var(--muted);
+    }
+
+    .panel {
+      border-radius: 28px;
+      padding: 18px;
+      scroll-margin-top: 100px;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .panel-head h3 {
+      margin: 0;
+      font-size: 1.08rem;
+      letter-spacing: -.02em;
+    }
+
+    .panel-head p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .tag {
+      padding: 8px 11px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      color: var(--muted);
+      font-size: .76rem;
+      white-space: nowrap;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      overflow: auto;
+      padding-bottom: 2px;
+      scrollbar-width: none;
+    }
+    .tabs::-webkit-scrollbar { display: none; }
+
+    .tab {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      color: var(--muted);
+      border-radius: 14px;
+      padding: 11px 14px;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all .18s ease;
+    }
+
+    .tab.active {
+      color: white;
+      background: linear-gradient(135deg, rgba(124,156,255,.18), rgba(159,124,255,.16));
+      border-color: rgba(124,156,255,.30);
+    }
+
+    body[data-theme="light"] .tab.active { color: #213358; }
+
+    .tab-panel { display: none; border-radius: 22px; padding: 16px; margin-top: 14px; }
+    .tab-panel.active { display: block; animation: fadeUp .22s ease; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .subject-grid,
+    .lesson-grid,
+    .cards-grid,
+    .planner-grid,
+    .calendar-grid,
+    .simulate-grid,
+    .clarify-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .subject-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .lesson-grid, .cards-grid, .simulate-grid, .clarify-grid, .planner-grid { grid-template-columns: 1fr; }
+
+    .subject-card,
+    .lesson-card,
+    .card,
+    .progress-card {
+      border-radius: 22px;
+      padding: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .subject-card.active,
+    .lesson-card.active {
+      border-color: rgba(124,156,255,.34);
+      background: linear-gradient(180deg, rgba(124,156,255,.14), rgba(255,255,255,.04));
+    }
+
+    .lesson-card.done { border-color: rgba(99,243,183,.24); }
+
+    .subject-top, .lesson-top, .card-top, .simulate-top, .planner-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .subject-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,.07);
+      font-size: 1.1rem;
+    }
+
+    .pill {
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: .74rem;
+      white-space: nowrap;
+      background: rgba(124,156,255,.12);
+      border: 1px solid rgba(124,156,255,.18);
+      color: #dce6ff;
+    }
+
+    .pill.success { background: rgba(99,243,183,.12); border-color: rgba(99,243,183,.20); color: #c7ffe2; }
+    .pill.warn { background: rgba(255,200,112,.12); border-color: rgba(255,200,112,.20); color: #ffe2af; }
+    .pill.danger { background: rgba(255,142,142,.12); border-color: rgba(255,142,142,.20); color: #ffd2d2; }
+
+    .progress {
+      width: 100%;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      overflow: hidden;
+      margin-top: 12px;
+    }
+
+    .progress > span {
+      display: block;
+      height: 100%;
+      width: 0;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent), var(--primary));
+      box-shadow: 0 0 24px rgba(124,156,255,.24);
+      transition: width .35s ease;
+    }
+
+    .muted, .card p, .lesson-card p, .subject-card p, .progress-card p, .simulate-grid p {
+      color: var(--muted);
+      line-height: 1.55;
+      margin: 0;
+      font-size: .9rem;
+    }
+
+    .meta-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: .78rem;
+    }
+
+    .toolbar input,
+    .toolbar select,
+    textarea,
+    .field,
+    .time-input {
+      min-height: 46px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      color: var(--text);
+      padding: 0 14px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: 14px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    .player-shell {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: 1fr;
+    }
+
+    .player-stage {
+      border-radius: 24px;
+      padding: 16px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02)),
+        rgba(8, 13, 25, .64);
+      border: 1px solid var(--line);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
+    }
+
+    body[data-theme="light"] .player-stage {
+      background: linear-gradient(180deg, rgba(255,255,255,.8), rgba(255,255,255,.55));
+    }
+
+    .player-stage pre {
+      margin: 0;
+      white-space: pre-wrap;
+      border-radius: 18px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--line);
+      padding: 14px;
+      min-height: 170px;
+      line-height: 1.7;
+      color: inherit;
+      font-family: inherit;
+    }
+
+    .player-actions { margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap; }
+
+    .pomodoro {
+      display: grid;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .pomodoro-main {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: 1fr;
+    }
+
+    .pomodoro-ring {
+      width: min(260px, 100%);
+      aspect-ratio: 1;
+      margin: 0 auto;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      position: relative;
+      background:
+        conic-gradient(var(--accent) var(--ring, 0%), rgba(255,255,255,.08) 0%);
+      isolation: isolate;
+    }
+
+    .pomodoro-ring::before {
+      content: "";
+      position: absolute;
+      inset: 14px;
+      border-radius: 50%;
+      background: var(--panel-strong);
+      border: 1px solid var(--line);
+      z-index: -1;
+    }
+
+    .ring-content {
+      text-align: center;
+      display: grid;
+      gap: 6px;
+    }
+
+    .ring-content .time {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 900;
+      letter-spacing: -.05em;
+    }
+
+    .ring-content .mode {
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .pomodoro-stats {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+    }
+
+    .mini-stat {
+      padding: 12px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--line);
+      text-align: center;
+    }
+
+    .mini-stat .v { font-size: 1.2rem; font-weight: 800; }
+    .mini-stat .l { color: var(--muted); font-size: .8rem; margin-top: 4px; }
+
+    .calendar-controls {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .calendar-grid {
+      grid-template-columns: repeat(7, minmax(0,1fr));
+    }
+
+    .weekday, .calendar-day {
+      min-height: 72px;
+      border-radius: 16px;
+      padding: 8px;
+    }
+
+    .weekday {
+      color: var(--muted);
+      font-size: .76rem;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,.03);
+      border: 1px dashed var(--line);
+    }
+
+    .calendar-day {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 8px;
+      cursor: pointer;
+      padding: 10px;
+    }
+
+    .calendar-day.outside { opacity: .36; }
+    .calendar-day.today { border-color: rgba(124,156,255,.34); }
+    .calendar-day.done { background: linear-gradient(180deg, rgba(99,243,183,.14), rgba(255,255,255,.04)); }
+    .calendar-day .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.10);
+    }
+    .calendar-day.done .dot { background: var(--success); box-shadow: 0 0 18px rgba(99,243,183,.45); }
+
+    .progress-card { display: grid; gap: 12px; }
+
+    .streak-banner {
+      border-radius: 24px;
+      padding: 16px;
+      background: linear-gradient(135deg, rgba(255,200,112,.16), rgba(124,156,255,.10));
+      border: 1px solid rgba(255,255,255,.09);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .exam-shell {
+      display: grid;
+      gap: 14px;
+    }
+
+    .simulate-grid .card.active-exam {
+      border-color: rgba(255,200,112,.34);
+      background: linear-gradient(180deg, rgba(255,200,112,.12), rgba(255,255,255,.04));
+    }
+
+    .exam-live {
+      border-radius: 22px;
+      padding: 16px;
+      border: 1px solid rgba(255,200,112,.16);
+      background: linear-gradient(180deg, rgba(255,200,112,.08), rgba(255,255,255,.03));
+    }
+
+    .exam-clock {
+      font-size: 1.8rem;
+      font-weight: 900;
+      letter-spacing: -.05em;
+    }
+
+    .exam-status {
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .score-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: .86rem;
+    }
+
+    .clarify-box {
+      display: grid;
+      gap: 12px;
+    }
+
+    .ai-bubble {
+      border-radius: 18px;
+      padding: 14px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid var(--line);
+      line-height: 1.65;
+    }
+
+    .planner-grid .card textarea { margin-top: 10px; }
+
+    .bottom-nav {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: max(12px, env(safe-area-inset-bottom));
+      width: min(calc(100% - 24px), 860px);
+      padding: 10px;
+      border-radius: 24px;
+      background: rgba(8, 13, 25, .86);
+      border: 1px solid rgba(255,255,255,.09);
+      box-shadow: var(--shadow-lg);
+      backdrop-filter: blur(18px);
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      z-index: 40;
+    }
+
+    body[data-theme="light"] .bottom-nav { background: rgba(255,255,255,.88); }
+
+    .mobile-nav-btn {
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      border-radius: 16px;
+      padding: 10px 8px;
+      display: grid;
+      gap: 4px;
+      place-items: center;
+      cursor: pointer;
+      font-size: .72rem;
+    }
+
+    .mobile-nav-btn.active {
+      background: rgba(124,156,255,.14);
+      color: white;
+    }
+
+    body[data-theme="light"] .mobile-nav-btn.active { color: #23365c; }
+
+    .toast-wrap {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      z-index: 100;
+      width: min(380px, calc(100% - 24px));
+      display: grid;
+      gap: 10px;
+    }
+
+    .toast {
+      border-radius: 18px;
+      padding: 14px 16px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      animation: slideIn .22s ease;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(4,8,14,.58);
+      backdrop-filter: blur(6px);
+      display: none;
+      place-items: center;
+      z-index: 120;
+      padding: 18px;
+    }
+
+    .modal.open { display: grid; }
+
+    .modal-card {
+      width: min(760px, 100%);
+      border-radius: 28px;
+      padding: 20px;
+      background: var(--panel-strong);
+    }
+
+    .checklist { display: grid; gap: 10px; }
+
+    .check-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 12px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--line);
+    }
+
+    .check-item input { margin-top: 3px; }
+
+    @media (min-width: 900px) {
+      .workspace {
+        grid-template-columns: var(--sidebar-w) 1fr;
+        align-items: start;
+      }
+      .sidebar { display: grid; }
+      .metrics { grid-template-columns: repeat(4, minmax(0,1fr)); }
+      .dashboard { grid-template-columns: 1.15fr .85fr; align-items: start; }
+      .subject-grid { grid-template-columns: repeat(4, minmax(0,1fr)); }
+      .lesson-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .cards-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .planner-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .player-shell { grid-template-columns: 1.2fr .8fr; }
+      .pomodoro-main { grid-template-columns: .9fr 1.1fr; align-items: center; }
+      .clarify-grid { grid-template-columns: .95fr 1.05fr; }
+    }
+
+    @media (min-width: 1180px) {
+      .lesson-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+      .cards-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+    }
+
+    @media (max-width: 899px) {
+      .premium-bar { top: 0; }
+      .header-actions .chip:nth-child(1) { display: none; }
+    }
+
+    @media print {
+      .sidebar,
+      .bottom-nav,
+      .toast-wrap,
+      .header-actions,
+      .hero-actions,
+      .player-actions,
+      #pomodoroPanel,
+      #clarifyPanel,
+      #examPanel,
+      .tabs,
+      .toolbar {
+        display: none !important;
+      }
+      body { background: #fff !important; color: #000 !important; }
+      .panel, .hero, .metric, .card, .subject-card, .lesson-card { box-shadow: none !important; background: white !important; }
+      .shell { max-width: 100%; padding: 0; }
+    }
+  </style>
+</head>
+<body data-theme="dark">
+  <div class="toast-wrap" id="toastWrap" aria-live="polite" aria-atomic="true"></div>
+
+  <div class="modal" id="examModal" aria-hidden="true">
+    <div class="modal-card">
+      <div class="panel-head">
+        <div>
+          <h3>Checklist mod simulare</h3>
+          <p>Pregătește sesiunea ca într-un mini examen real.</p>
+        </div>
+        <button class="btn btn-ghost" id="closeExamModal" type="button">Închide</button>
+      </div>
+      <div class="checklist">
+        <label class="check-item"><input type="checkbox" /> <span>Telefon pe modul fără notificări</span></label>
+        <label class="check-item"><input type="checkbox" /> <span>Ai o durată setată și nu schimbi tab-ul de lucru</span></label>
+        <label class="check-item"><input type="checkbox" /> <span>Scrii răspunsul complet, nu doar idei izolate</span></label>
+        <label class="check-item"><input type="checkbox" /> <span>La final îți dai singur feedback pe claritate și structură</span></label>
+      </div>
+      <div class="hero-actions">
+        <button class="btn btn-primary" id="startExamFromModal">Începe simularea</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="shell">
+    <header class="premium-bar">
+      <div class="brand">
+        <div class="logo">B+</div>
+        <div class="brand-copy">
+          <h1>BAC Learning Space Premium</h1>
+          <p>Mini aplicație reală • tab-uri • progres • Pomodoro • simulare</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="chip" id="todayChip" type="button">🔥 streak 0</button>
+        <button class="chip" id="xpChip" type="button">✨ 0 XP</button>
+        <button class="chip" id="themeToggle" type="button">🌙 Dark</button>
+      </div>
+    </header>
+
+    <div class="workspace">
+      <aside class="sidebar">
+        <section class="sidebar-section">
+          <p class="sidebar-title">Navigare</p>
+          <div class="nav-group" id="desktopNav"></div>
+        </section>
+
+        <section class="sidebar-section">
+          <p class="sidebar-title">Stare rapidă</p>
+          <div class="card">
+            <div class="card-top">
+              <div>
+                <h4 style="margin:0;">Focus azi</h4>
+                <p id="sidebarFocus">Continuă materia principală.</p>
+              </div>
+              <span class="pill">Focus</span>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-top">
+              <div>
+                <h4 style="margin:0;">Sesiuni Pomodoro</h4>
+                <p id="sidebarPomodoro">0 sesiuni finalizate</p>
+              </div>
+              <span class="pill success">Timer</span>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-top">
+              <div>
+                <h4 style="margin:0;">Exam mode</h4>
+                <p id="sidebarExam">Nu rulează nicio simulare.</p>
+              </div>
+              <span class="pill warn">Live</span>
+            </div>
+          </div>
+        </section>
+      </aside>
+
+      <main class="main">
+        <section class="hero" id="home">
+          <div class="eyebrow">✨ Aspect mai premium, animații fine și flux real de studiu</div>
+          <h2>Înveți pentru BAC ca într-o aplicație modernă</h2>
+          <p>
+            Ai sidebar pe desktop, tab-uri clare, lecții editabile, progres salvat local, cronometru Pomodoro,
+            streak zilnic, calendar de progres, mod simulare examen și o zonă „Clarifică cu AI” pentru explicații rapide.
+          </p>
+          <div class="hero-actions">
+            <button class="btn btn-primary" data-jump="studyHub">Deschide hub-ul</button>
+            <button class="btn btn-secondary" data-jump="pomodoroPanel">Pornește Pomodoro</button>
+            <button class="btn btn-ghost" data-jump="examPanel">Simulare examen</button>
+          </div>
+        </section>
+
+        <section class="metrics">
+          <article class="metric">
+            <div class="label">Lecții finalizate</div>
+            <div class="value" id="statLessons">0</div>
+            <div class="sub">din <span id="totalLessons">0</span> lecții disponibile</div>
+          </article>
+          <article class="metric">
+            <div class="label">Quiz score</div>
+            <div class="value"><span id="statQuiz">0</span>/<span id="totalQuiz">0</span></div>
+            <div class="sub">verificare activă</div>
+          </article>
+          <article class="metric">
+            <div class="label">XP total</div>
+            <div class="value" id="statXP">0</div>
+            <div class="sub" id="statXPLabel">start activ</div>
+          </article>
+          <article class="metric">
+            <div class="label">Streak zilnic</div>
+            <div class="value" id="statStreak">0</div>
+            <div class="sub">zile consecutive de activitate</div>
+          </article>
+        </section>
+
+        <div class="dashboard">
+          <section class="panel" id="studyHub">
+            <div class="panel-head">
+              <div>
+                <h3>Study Hub</h3>
+                <p>Materii, lecții, quiz și clarificări într-un singur loc, organizate pe tab-uri.</p>
+              </div>
+              <span class="tag" id="currentSubjectLabel">Română</span>
+            </div>
+
+            <div class="tabs" id="mainTabs">
+              <button class="tab active" data-tab="subjects">Materii</button>
+              <button class="tab" data-tab="lessons">Lecții</button>
+              <button class="tab" data-tab="player">Player</button>
+              <button class="tab" data-tab="quiz">Quiz</button>
+              <button class="tab" data-tab="clarify">Clarifică cu AI</button>
+            </div>
+
+            <div class="tab-panel active" data-panel="subjects">
+              <div class="toolbar">
+                <input class="field" id="subjectSearch" type="search" placeholder="Caută materie..." />
+                <select class="field" id="priorityFilter">
+                  <option value="toate">Toate prioritățile</option>
+                  <option value="ridicată">Ridicată</option>
+                  <option value="medie">Medie</option>
+                  <option value="scăzută">Scăzută</option>
+                </select>
+              </div>
+              <div class="subject-grid" id="subjectGrid"></div>
+            </div>
+
+            <div class="tab-panel" data-panel="lessons">
+              <div class="toolbar">
+                <input class="field" id="lessonSearch" type="search" placeholder="Caută lecție..." />
+                <select class="field" id="lessonStatusFilter">
+                  <option value="toate">Toate lecțiile</option>
+                  <option value="nefinalizate">Nefinalizate</option>
+                  <option value="finalizate">Finalizate</option>
+                </select>
+              </div>
+              <div class="lesson-grid" id="lessonGrid"></div>
+            </div>
+
+            <div class="tab-panel" data-panel="player">
+              <div class="player-shell">
+                <div class="player-stage">
+                  <div class="lesson-top">
+                    <div>
+                      <h4 id="playerTitle" style="margin:0 0 4px;">Selectează o lecție</h4>
+                      <p id="playerMeta">Materia și nivelul apar aici.</p>
+                    </div>
+                    <span class="pill warn" id="playerStageBadge">Teorie</span>
+                  </div>
+                  <pre id="playerTheory">Alege o lecție pentru a vedea teoria completă.</pre>
+                  <label class="sr-only" for="studentAnswer">Răspuns</label>
+                  <textarea id="studentAnswer" placeholder="Scrie rezumatul tău, răspunsul sau pașii de rezolvare..."></textarea>
+                  <div class="player-actions">
+                    <button class="btn btn-secondary" id="prevLesson" type="button">Înapoi</button>
+                    <button class="btn btn-secondary" id="nextLesson" type="button">Înainte</button>
+                    <button class="btn btn-secondary" id="toggleExample" type="button">Exemplu</button>
+                    <button class="btn btn-secondary" id="showHint" type="button">Hint</button>
+                    <button class="btn btn-primary" id="completeLesson" type="button">Finalizează lecția</button>
+                  </div>
+                </div>
+
+                <div class="card" style="display:grid; gap:14px;">
+                  <div>
+                    <div class="card-top">
+                      <div>
+                        <h4 style="margin:0;">Date editabile</h4>
+                        <p>Poți personaliza conținutul lecției curente.</p>
+                      </div>
+                      <span class="pill">Editable</span>
+                    </div>
+                  </div>
+                  <label>
+                    <span class="sr-only">Titlu lecție</span>
+                    <input class="field" id="editLessonTitle" type="text" placeholder="Titlul lecției" />
+                  </label>
+                  <label>
+                    <span class="sr-only">Teorie lecție</span>
+                    <textarea id="editLessonTheory" placeholder="Editează teoria lecției..."></textarea>
+                  </label>
+                  <div class="inline-actions">
+                    <button class="btn btn-primary" id="saveLessonEdit" type="button">Salvează modificările</button>
+                    <button class="btn btn-ghost" id="resetLessonEdit" type="button">Revino la original</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="tab-panel" data-panel="quiz">
+              <article class="card">
+                <div class="card-top">
+                  <div>
+                    <h4 id="quizQuestion" style="margin:0 0 4px;">Se încarcă întrebarea...</h4>
+                    <p id="quizMeta">Alege varianta corectă.</p>
+                  </div>
+                  <span class="pill" id="quizSubjectPill">Quiz</span>
+                </div>
+                <div class="cards-grid" id="quizOptions" style="margin-top:12px;"></div>
+                <div class="hero-actions" style="margin-top:14px;">
+                  <button class="btn btn-secondary" id="nextQuiz" type="button">Următoarea</button>
+                  <button class="btn btn-ghost" id="resetQuiz" type="button">Reset quiz</button>
+                </div>
+              </article>
+            </div>
+
+            <div class="tab-panel" data-panel="clarify">
+              <div class="clarify-grid">
+                <article class="card clarify-box">
+                  <div class="card-top">
+                    <div>
+                      <h4 style="margin:0;">Ce vrei clarificat?</h4>
+                      <p>Introduce o întrebare scurtă despre lecția curentă.</p>
+                    </div>
+                    <span class="pill">AI Clarify</span>
+                  </div>
+                  <textarea id="clarifyQuestion" placeholder="Ex: Explică mai simplu ce înseamnă monotonia funcției sau cum construiesc teza într-un eseu."></textarea>
+                  <div class="inline-actions">
+                    <button class="btn btn-primary" id="generateClarify" type="button">Clarifică</button>
+                    <button class="btn btn-secondary" id="insertClarifyPrompt" type="button">Pune în editor</button>
+                  </div>
+                </article>
+                <article class="card clarify-box">
+                  <div class="card-top">
+                    <div>
+                      <h4 style="margin:0;">Răspuns ghidat</h4>
+                      <p id="clarifyMeta">Explicația apare aici, în funcție de lecția selectată.</p>
+                    </div>
+                    <span class="pill success">Smart helper</span>
+                  </div>
+                  <div class="ai-bubble" id="clarifyResponse">
+                    Selectează o lecție și apasă „Clarifică” pentru o explicație simplificată, o analogie și 3 pași de recap.
+                  </div>
+                </article>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel" id="plannerPanel">
+            <div class="panel-head">
+              <div>
+                <h3>Planner & progres</h3>
+                <p>Task-uri zilnice, streak și calendar vizual al activității.</p>
+              </div>
+              <span class="tag">Autosave</span>
+            </div>
+
+            <div class="streak-banner">
+              <div>
+                <h4 style="margin:0 0 4px;">Ai un streak de <span id="streakText">0</span> zile</h4>
+                <p class="muted" id="streakHint">Marchează azi ca zi activă și păstrează ritmul.</p>
+              </div>
+              <button class="btn btn-primary" id="markTodayDone" type="button">Marchează azi</button>
+            </div>
+
+            <div class="planner-grid" style="margin-top:14px;">
+              <article class="card">
+                <div class="planner-top">
+                  <div>
+                    <h4 style="margin:0;">Obiectivul de azi</h4>
+                    <p>Un singur obiectiv clar și realizabil.</p>
+                  </div>
+                  <span class="pill">Daily</span>
+                </div>
+                <textarea id="dailyGoal" placeholder="Ex: finalizez 2 lecții și un quiz la matematică."></textarea>
+              </article>
+              <article class="card">
+                <div class="planner-top">
+                  <div>
+                    <h4 style="margin:0;">Notițe rapide</h4>
+                    <p>Întrebări, formule, idei de recap.</p>
+                  </div>
+                  <span class="pill">Notes</span>
+                </div>
+                <textarea id="quickNotes" placeholder="Ex: la română formulez teza din prima propoziție."></textarea>
+              </article>
+            </div>
+
+            <article class="progress-card" style="margin-top:14px;">
+              <div class="calendar-controls">
+                <button class="mini-btn" id="prevMonth" type="button">←</button>
+                <strong id="calendarLabel">Martie 2026</strong>
+                <button class="mini-btn" id="nextMonth" type="button">→</button>
+              </div>
+              <div class="calendar-grid" id="calendarGrid"></div>
+            </article>
+          </section>
+        </div>
+
+        <section class="panel" id="pomodoroPanel">
+          <div class="panel-head">
+            <div>
+              <h3>Pomodoro Focus Engine</h3>
+              <p>Cronometru real, sesiuni completate și pauze integrate.</p>
+            </div>
+            <span class="tag" id="pomodoroTag">Work</span>
+          </div>
+
+          <div class="pomodoro-main">
+            <div class="pomodoro-ring" id="pomodoroRing" style="--ring:0%;">
+              <div class="ring-content">
+                <div class="time" id="pomodoroTime">25:00</div>
+                <div class="mode" id="pomodoroMode">Sesiune de studiu</div>
+              </div>
+            </div>
+            <div class="pomodoro">
+              <div class="toolbar">
+                <input class="time-input" id="workMinutes" type="number" min="5" max="90" value="25" />
+                <input class="time-input" id="breakMinutes" type="number" min="1" max="30" value="5" />
+              </div>
+              <div class="inline-actions">
+                <button class="btn btn-primary" id="startPomodoro" type="button">Start</button>
+                <button class="btn btn-secondary" id="pausePomodoro" type="button">Pauză</button>
+                <button class="btn btn-ghost" id="resetPomodoro" type="button">Reset</button>
+                <button class="btn btn-secondary" id="skipPomodoro" type="button">Skip</button>
+              </div>
+              <div class="pomodoro-stats">
+                <div class="mini-stat"><div class="v" id="pomodoroSessions">0</div><div class="l">sesiuni azi</div></div>
+                <div class="mini-stat"><div class="v" id="pomodoroMinutesDone">0</div><div class="l">minute focus</div></div>
+                <div class="mini-stat"><div class="v" id="pomodoroCycle">1</div><div class="l">ciclu curent</div></div>
+              </div>
+              <article class="card">
+                <h4 style="margin:0 0 8px;">Focus recomandat</h4>
+                <p id="focusRecommendation">Începe cu lecția curentă și notează 3 idei-cheie înainte să treci la quiz.</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" id="papersPanel">
+          <div class="panel-head">
+            <div>
+              <h3>Variante BAC 2009–2025</h3>
+              <p>Arhivă extinsă de variante și subiecte oficiale, filtrabilă după profil și an.</p>
+            </div>
+            <span class="tag">2009–2025</span>
+          </div>
+
+          <div class="toolbar">
+            <select class="field" id="paperProfileFilter">
+              <option value="toate">Toate profilele</option>
+              <option value="uman">Uman</option>
+              <option value="real">Real</option>
+              <option value="m1">M1</option>
+              <option value="m2">M2</option>
+            </select>
+            <select class="field" id="paperYearFilter"></select>
+          </div>
+
+          <div class="cards-grid" id="papersGrid" style="margin-top:14px;"></div>
+          <div class="hero-actions" style="margin-top:14px;">
+            <button class="btn btn-secondary" id="openPaperWorkspace" type="button">Deschide workspace variantă</button>
+          </div>
+        </section>
+
+        <section class="panel" id="paperWorkspacePanel">
+          <div class="panel-head">
+            <div>
+              <h3>Workspace pe variantă</h3>
+              <p>Lucrezi pe subiect, vezi baremul, marchezi statusul și salvezi notițele tale.</p>
+            </div>
+            <span class="tag" id="paperWorkspaceStatus">Neselectat</span>
+          </div>
+
+          <div class="player-shell">
+            <article class="card" style="display:grid; gap:14px;">
+              <div class="card-top">
+                <div>
+                  <h4 id="paperWorkspaceTitle" style="margin:0 0 6px;">Selectează o variantă</h4>
+                  <p id="paperWorkspaceMeta">Aici apar materia, profilul și anul selectat.</p>
+                </div>
+                <span class="pill" id="paperWorkspaceYear">—</span>
+              </div>
+              <div class="tabs" id="paperTabs">
+                <button class="tab active" data-paper-tab="subiect">Subiect</button>
+                <button class="tab" data-paper-tab="barem">Barem</button>
+                <button class="tab" data-paper-tab="rezolvare">Rezolvare</button>
+              </div>
+              <div class="tab-panel active" data-paper-panel="subiect">
+                <div class="ai-bubble" id="paperTasksView">Selectează o variantă pentru a vedea conținutul.</div>
+              </div>
+              <div class="tab-panel" data-paper-panel="barem">
+                <div class="ai-bubble" id="paperBaremView">Baremul apare aici.</div>
+              </div>
+              <div class="tab-panel" data-paper-panel="rezolvare">
+                <div class="ai-bubble" id="paperSolutionView">Rezolvarea ghidată apare aici.</div>
+              </div>
+            </article>
+
+            <article class="card" style="display:grid; gap:14px;">
+              <div class="card-top">
+                <div>
+                  <h4 style="margin:0 0 6px;">Lucru personal</h4>
+                  <p>Marchează progresul și scrie ideile sau rezolvarea ta.</p>
+                </div>
+                <span class="pill success">Autosave</span>
+              </div>
+              <div class="toolbar">
+                <select class="field" id="paperStatusSelect">
+                  <option value="de_făcut">De făcut</option>
+                  <option value="în_lucru">În lucru</option>
+                  <option value="rezolvat">Rezolvat</option>
+                  <option value="de_revăzut">De revăzut</option>
+                  <option value="favorit">Favorit</option>
+                </select>
+                <button class="btn btn-secondary" id="togglePaperFavorite" type="button">⭐ Favorite</button>
+              </div>
+              <textarea id="paperNotes" placeholder="Scrie aici rezolvarea ta, observații, greșeli frecvente sau repere de învățat..."></textarea>
+              <div class="inline-actions">
+                <button class="btn btn-primary" id="savePaperStatus" type="button">Salvează status</button>
+                <button class="btn btn-ghost" id="clearPaperNotes" type="button">Șterge notițele</button>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="examPanel">
+          <div class="panel-head">
+            <div>
+              <h3>Exam simulation mode</h3>
+              <p>Antrenament în timp controlat, cu stare live și feedback final.</p>
+            </div>
+            <span class="tag">Exam Mode</span>
+          </div>
+
+          <div class="exam-shell">
+            <div class="inline-actions">
+              <button class="btn btn-secondary" id="openExamChecklist" type="button">Checklist examen</button>
+            </div>
+
+            <div class="simulate-grid" id="simulationsGrid"></div>
+
+            <article class="exam-live" id="examLiveBox">
+              <div class="card-top">
+                <div>
+                  <h4 id="examTitle" style="margin:0 0 4px;">Nicio simulare activă</h4>
+                  <p class="exam-status" id="examStatus">Alege o simulare și pornește timerul.</p>
+                </div>
+                <span class="pill warn" id="examDifficulty">—</span>
+              </div>
+              <div class="exam-clock" id="examClock">00:00</div>
+              <div class="score-row">
+                <span id="examProfile">profil —</span>
+                <span id="examFeedbackHint">feedback la final</span>
+              </div>
+              <textarea id="examAnswer" placeholder="Scrie răspunsul ca într-o simulare reală..."></textarea>
+              <div class="hero-actions">
+                <button class="btn btn-primary" id="startExam" type="button">Pornește</button>
+                <button class="btn btn-secondary" id="finishExam" type="button">Finalizează</button>
+                <button class="btn btn-ghost" id="resetExam" type="button">Reset</button>
+              </div>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <nav class="bottom-nav" aria-label="Navigare mobilă">
+    <button class="mobile-nav-btn active" data-jump="home"><span>🏠</span><span>Home</span></button>
+    <button class="mobile-nav-btn" data-jump="studyHub"><span>📚</span><span>Hub</span></button>
+    <button class="mobile-nav-btn" data-jump="plannerPanel"><span>📅</span><span>Planner</span></button>
+    <button class="mobile-nav-btn" data-jump="pomodoroPanel"><span>⏱️</span><span>Focus</span></button>
+    <button class="mobile-nav-btn" data-jump="papersPanel"><span>🗂️</span><span>Variante</span></button>
+    <button class="mobile-nav-btn" data-jump="paperWorkspacePanel"><span>🧠</span><span>Work</span></button>
+    <button class="mobile-nav-btn" data-jump="examPanel"><span>📝</span><span>Exam</span></button>
+  </nav>
+
+  <script>
+    const subjects = [
+      { id: 'romana', name: 'Limba și literatura română', short: 'Română', icon: '📝', level: 'Core', priority: 'ridicată' },
+      { id: 'matematica', name: 'Matematică', short: 'Matematică', icon: '📐', level: 'Core', priority: 'ridicată' },
+      { id: 'istorie', name: 'Istorie', short: 'Istorie', icon: '🏛️', level: 'Profil', priority: 'medie' },
+      { id: 'logica', name: 'Logică', short: 'Logică', icon: '🧩', level: 'Profil', priority: 'medie' },
+      { id: 'informatica', name: 'Informatică', short: 'Informatică', icon: '💻', level: 'Profil', priority: 'ridicată' },
+      { id: 'biologie', name: 'Biologie', short: 'Biologie', icon: '🧬', level: 'Profil', priority: 'medie' },
+      { id: 'geografie', name: 'Geografie', short: 'Geografie', icon: '🌍', level: 'Profil', priority: 'scăzută' },
+      { id: 'fizica', name: 'Fizică', short: 'Fizică', icon: '⚛️', level: 'Profil', priority: 'medie' }
+    ];
+
+    const baseLessons = [
+      { id: 1, subject: 'romana', level: 'Beginner', title: 'Genuri și specii literare', xp: 40, theory: 'Începe cu distincția dintre genurile literare: epic, liric și dramatic. Pentru BAC, e important să recunoști rapid trăsăturile și să le legi de operă, autor și epocă.', example: 'Textul epic urmărește naratorul, acțiunea și personajele. Textul liric pune accent pe eul liric, imagini și figuri de stil.', hint: 'Fă o fișă cu 3 coloane: definiție, trăsături, exemplu.' },
+      { id: 2, subject: 'romana', level: 'Intermediate', title: 'Eseul argumentativ', xp: 50, theory: 'Eseul argumentativ are teză clară, două argumente relevante și concluzie în acord cu ideea centrală. Coerența logică și legătura cu cerința sunt esențiale.', example: 'Formulezi opinia, aduci un argument din experiență sau cultură generală și unul din literatură sau actualitate, apoi închei coerent.', hint: 'Folosește conectori: în primul rând, în al doilea rând, prin urmare.' },
+      { id: 3, subject: 'matematica', level: 'Beginner', title: 'Funcții și reprezentare grafică', xp: 45, theory: 'Studiul de funcție pornește din domeniu, zerouri, semn, monotonie și intersecții cu axele. Schița graficului te ajută să vezi rapid comportamentul.', example: 'Pentru f(x)=x²-4, zerourile sunt -2 și 2, iar vârful parabolei este în (0,-4).', hint: 'Rezolvă separat: domeniu, zerouri, semn, variație.' },
+      { id: 4, subject: 'matematica', level: 'Intermediate', title: 'Derivate și interpretare', xp: 55, theory: 'Derivata arată rata de variație instantanee. La BAC, interesează legătura cu monotonia și punctele critice.', example: 'Dacă f\'(x) > 0 pe un interval, funcția este crescătoare acolo.', hint: 'Fă tabelul de variație doar după studiul semnului derivatei.' },
+      { id: 5, subject: 'istorie', level: 'Beginner', title: 'România modernă', xp: 40, theory: 'Leagă cronologic formarea statului modern, dubla alegere a lui Cuza, reformele și independența.', example: 'Unirea Principatelor din 1859 deschide drumul reformelor administrative și sociale.', hint: 'Construiește o axă cronologică foarte scurtă.' },
+      { id: 6, subject: 'informatica', level: 'Intermediate', title: 'Algoritmi elementari', xp: 60, theory: 'Algoritmii elementari includ maxim, minim, sumă, numărare și parcurgere. Contează logica pașilor, nu doar codul.', example: 'Pentru maximul dintr-un șir, initializezi cu primul element și compari fiecare element următor.', hint: 'Scrie întâi pseudocodul, apoi varianta de limbaj.' },
+      { id: 7, subject: 'biologie', level: 'Beginner', title: 'Sistemul nervos', xp: 42, theory: 'Reține diferența dintre sistem nervos central și periferic, dar și rolul neuronului și al sinapsei.', example: 'Creierul și măduva spinării aparțin sistemului nervos central.', hint: 'Leagă fiecare structură de funcția ei principală.' },
+      { id: 8, subject: 'logica', level: 'Beginner', title: 'Propoziții și raționamente', xp: 35, theory: 'În logică înveți să identifici propoziții, valori de adevăr și validitatea inferențelor.', example: 'Dacă toate mamiferele sunt vertebrate și balena este mamifer, atunci balena este vertebrată.', hint: 'Separă premisele de concluzie.' }
+    ];
+
+    const quiz = [
+      { subject: 'Română', question: 'Care este structura minimă recomandată pentru un eseu argumentativ?', options: ['Teză, două argumente, concluzie', 'Titlu, definiție, bibliografie', 'Doar exemple și concluzie', 'Introducere și citat'], answer: 0 },
+      { subject: 'Matematică', question: 'Dacă f\'(x) este pozitivă pe un interval, funcția este:', options: ['descrescătoare', 'constantă', 'crescătoare', 'periodică'], answer: 2 },
+      { subject: 'Istorie', question: 'Ce eveniment este asociat cu anul 1859?', options: ['Marea Unire', 'Unirea Principatelor', 'Independența României', 'Constituția din 1923'], answer: 1 },
+      { subject: 'Informatică', question: 'Ce faci de regulă înainte să codezi un algoritm?', options: ['Îl rulezi mental și scrii pașii', 'Îl compilezi fără să îl scrii', 'Îl transformi direct în interfață', 'Îl pui într-un tabel Excel'], answer: 0 }
+    ];
+
+    const simulations = [
+      { id: 1, subject: 'Română', profile: 'uman', title: 'Simulare 30 min – eseu + analiză', duration: 30, difficulty: 'medie', brief: 'Text suport, item de argumentare și mini-plan de eseu.', feedback: 'Punctează claritatea tezei și coerența formulării.' },
+      { id: 2, subject: 'Matematică', profile: 'm1', title: 'Simulare 45 min – funcții și derivate', duration: 45, difficulty: 'ridicată', brief: 'Domeniu, semn, derivată, variație și interpretare.', feedback: 'Contează ordinea pașilor și justificarea calculelor.' },
+      { id: 3, subject: 'Istorie', profile: 'uman', title: 'Simulare 35 min – sursă și eseu scurt', duration: 35, difficulty: 'medie', brief: 'Analiza sursei și răspuns argumentat cu repere cronologice.', feedback: 'Contează raportarea la sursă și ordinea ideilor.' }
+    ];
+
+    const pastPapers = Array.from({ length: 17 }, (_, i) => {
+      const year = 2025 - i;
+      const profile = year % 4 === 0 ? 'real' : year % 3 === 0 ? 'm1' : year % 2 === 0 ? 'uman' : 'm2';
+      const subject = year % 5 === 0 ? 'Istorie' : year % 4 === 0 ? 'Matematică' : year % 3 === 0 ? 'Română' : 'Biologie';
+      const type = year >= 2020 ? 'Subiect oficial' : 'Variantă BAC';
+      return {
+        id: year,
+        year,
+        subject,
+        profile,
+        type,
+        title: `${type} ${year} – ${subject}`,
+        tasks: subject === 'Română'
+          ? ['Subiectul I: text la prima vedere', 'Subiectul II: argumentare / text funcțional', 'Subiectul III: eseu literar']
+          : subject === 'Matematică'
+            ? ['Subiectul I: itemi scurți', 'Subiectul II: algebră și analiză', 'Subiectul III: funcții / geometrie']
+            : subject === 'Istorie'
+              ? ['Analiza sursei istorice', 'Cronologie și cauzalitate', 'Eseu structurat']
+              : ['Noțiuni teoretice', 'Probleme aplicate', 'Răspuns argumentat'],
+        solution: subject === 'Română'
+          ? 'Rezolvarea urmărește identificarea cerinței, structurarea ideilor și formulări-model pentru introducere, argumentare și concluzie.'
+          : subject === 'Matematică'
+            ? 'Rezolvarea este împărțită pe pași: idee, formulă, calcul și verificare, pentru a pune accent pe metodă.'
+            : subject === 'Istorie'
+              ? 'Rezolvarea urmărește informația explicită și implicită din sursă, plus răspuns cronologic și argumentat.'
+              : 'Rezolvarea separă clar definițiile, relațiile structură-funcție și pașii necesari pentru exercițiile aplicate.',
+        barem: subject === 'Română'
+          ? ['30p Subiectul I', '20p Subiectul II', '30p Subiectul III', '10p redactare', '10p din oficiu']
+          : ['30p Subiectul I', '30p Subiectul II', '30p Subiectul III', '10p din oficiu']
+      };
+    });
+
+    const STORAGE_KEYS = {
+      completedLessons: 'blsp_completed_lessons',
+      xp: 'blsp_xp',
+      quizIndex: 'blsp_quiz_index',
+      quizScore: 'blsp_quiz_score',
+      answered: 'blsp_answered',
+      theme: 'blsp_theme',
+      selectedSubject: 'blsp_selected_subject',
+      selectedLessonId: 'blsp_selected_lesson_id',
+      lessonView: 'blsp_lesson_view',
+      answerDrafts: 'blsp_answer_drafts',
+      dailyGoal: 'blsp_daily_goal',
+      quickNotes: 'blsp_quick_notes',
+      editedLessons: 'blsp_edited_lessons',
+      streakDays: 'blsp_streak_days',
+      lastActiveDate: 'blsp_last_active_date',
+      pomodoroSessions: 'blsp_pomodoro_sessions',
+      pomodoroMinutesDone: 'blsp_pomodoro_minutes_done',
+      examDrafts: 'blsp_exam_drafts',
+      paperProgress: 'blsp_paper_progress',
+      selectedPaperId: 'blsp_selected_paper_id'
+    };
+
+    const state = {
+      selectedSubject: localStorage.getItem(STORAGE_KEYS.selectedSubject) || 'romana',
+      selectedLessonId: Number(localStorage.getItem(STORAGE_KEYS.selectedLessonId) || 1),
+      lessonView: localStorage.getItem(STORAGE_KEYS.lessonView) || 'theory',
+      completedLessons: JSON.parse(localStorage.getItem(STORAGE_KEYS.completedLessons) || '[]'),
+      xp: Number(localStorage.getItem(STORAGE_KEYS.xp) || 0),
+      quizIndex: Number(localStorage.getItem(STORAGE_KEYS.quizIndex) || 0),
+      quizScore: Number(localStorage.getItem(STORAGE_KEYS.quizScore) || 0),
+      answered: JSON.parse(localStorage.getItem(STORAGE_KEYS.answered) || '[]'),
+      answerDrafts: JSON.parse(localStorage.getItem(STORAGE_KEYS.answerDrafts) || '{}'),
+      editedLessons: JSON.parse(localStorage.getItem(STORAGE_KEYS.editedLessons) || '{}'),
+      streakDays: JSON.parse(localStorage.getItem(STORAGE_KEYS.streakDays) || '[]'),
+      lastActiveDate: localStorage.getItem(STORAGE_KEYS.lastActiveDate) || '',
+      pomodoroSessions: Number(localStorage.getItem(STORAGE_KEYS.pomodoroSessions) || 0),
+      pomodoroMinutesDone: Number(localStorage.getItem(STORAGE_KEYS.pomodoroMinutesDone) || 0),
+      examDrafts: JSON.parse(localStorage.getItem(STORAGE_KEYS.examDrafts) || '{}'),
+      paperProgress: JSON.parse(localStorage.getItem(STORAGE_KEYS.paperProgress) || '{}'),
+      selectedPaperId: Number(localStorage.getItem(STORAGE_KEYS.selectedPaperId) || 0),
+      activeExamId: null,
+      examRunning: false,
+      examRemainingSec: 0,
+      examInterval: null,
+      pomodoro: {
+        isRunning: false,
+        isBreak: false,
+        cycle: 1,
+        totalSec: 25 * 60,
+        remainingSec: 25 * 60,
+        interval: null
+      },
+      calendarCursor: new Date(),
+      currentTab: 'subjects'
+    };
+
+    const navItems = [
+      { id: 'home', label: 'Home', icon: '🏠' },
+      { id: 'studyHub', label: 'Study Hub', icon: '📚' },
+      { id: 'plannerPanel', label: 'Planner', icon: '📅' },
+      { id: 'pomodoroPanel', label: 'Pomodoro', icon: '⏱️' },
+      { id: 'papersPanel', label: 'Variante', icon: '🗂️' },
+      { id: 'examPanel', label: 'Exam mode', icon: '📝' }
+    ];
+
+    function $(id) { return document.getElementById(id); }
+    function normalize(text) { return String(text || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
+    function todayKey(date = new Date()) {
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, '0');
+      const d = String(date.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+
+    function getLessons() {
+      return baseLessons.map(lesson => {
+        const edited = state.editedLessons[String(lesson.id)] || {};
+        return { ...lesson, ...edited };
+      });
+    }
+
+    function getLessonsForSubject(subjectId) { return getLessons().filter(l => l.subject === subjectId); }
+    function getLessonById(id) { return getLessons().find(l => l.id === id) || getLessons()[0]; }
+    function getSelectedLesson() { return getLessonById(state.selectedLessonId); }
+    function getSubjectById(id) { return subjects.find(s => s.id === id); }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEYS.completedLessons, JSON.stringify(state.completedLessons));
+      localStorage.setItem(STORAGE_KEYS.xp, String(state.xp));
+      localStorage.setItem(STORAGE_KEYS.quizIndex, String(state.quizIndex));
+      localStorage.setItem(STORAGE_KEYS.quizScore, String(state.quizScore));
+      localStorage.setItem(STORAGE_KEYS.answered, JSON.stringify(state.answered));
+      localStorage.setItem(STORAGE_KEYS.selectedSubject, state.selectedSubject);
+      localStorage.setItem(STORAGE_KEYS.selectedLessonId, String(state.selectedLessonId));
+      localStorage.setItem(STORAGE_KEYS.lessonView, state.lessonView);
+      localStorage.setItem(STORAGE_KEYS.answerDrafts, JSON.stringify(state.answerDrafts));
+      localStorage.setItem(STORAGE_KEYS.editedLessons, JSON.stringify(state.editedLessons));
+      localStorage.setItem(STORAGE_KEYS.streakDays, JSON.stringify(state.streakDays));
+      localStorage.setItem(STORAGE_KEYS.lastActiveDate, state.lastActiveDate || '');
+      localStorage.setItem(STORAGE_KEYS.pomodoroSessions, String(state.pomodoroSessions));
+      localStorage.setItem(STORAGE_KEYS.pomodoroMinutesDone, String(state.pomodoroMinutesDone));
+      localStorage.setItem(STORAGE_KEYS.examDrafts, JSON.stringify(state.examDrafts));
+      localStorage.setItem(STORAGE_KEYS.paperProgress, JSON.stringify(state.paperProgress));
+      localStorage.setItem(STORAGE_KEYS.selectedPaperId, String(state.selectedPaperId || 0));
+    }
+
+    function showToast(message, variant = 'info') {
+      const wrap = $('toastWrap');
+      const icons = { success: '✅', warn: '⚠️', info: 'ℹ️' };
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.innerHTML = `<div>${icons[variant] || 'ℹ️'}</div><div>${message}</div>`;
+      wrap.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-6px)';
+        setTimeout(() => toast.remove(), 180);
+      }, 2400);
+    }
+
+    function updateTheme(theme) {
+      document.body.dataset.theme = theme;
+      $('themeToggle').textContent = theme === 'light' ? '☀️ Light' : '🌙 Dark';
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', theme === 'light' ? '#eef3ff' : '#0b1020');
+      localStorage.setItem(STORAGE_KEYS.theme, theme);
+    }
+
+    function scrollToId(id) {
+      const target = document.getElementById(id);
+      if (!target) return;
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      document.querySelectorAll('.mobile-nav-btn, .nav-link').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.jump === id);
+      });
+    }
+
+    function setTab(tabId) {
+      state.currentTab = tabId;
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.toggle('active', tab.dataset.tab === tabId));
+      document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.toggle('active', panel.dataset.panel === tabId));
+    }
+
+    function getSubjectProgress(subjectId) {
+      const lessons = getLessonsForSubject(subjectId);
+      if (!lessons.length) return 0;
+      const done = lessons.filter(l => state.completedLessons.includes(l.id)).length;
+      return Math.round((done / lessons.length) * 100);
+    }
+
+    function getStudiedSubjectsCount() {
+      const doneLessons = getLessons().filter(l => state.completedLessons.includes(l.id));
+      return new Set(doneLessons.map(l => l.subject)).size;
+    }
+
+    function getLevelLabel() {
+      if (state.xp >= 320) return 'nivel excelent';
+      if (state.xp >= 180) return 'nivel foarte bun';
+      if (state.xp >= 80) return 'nivel în creștere';
+      return 'start activ';
+    }
+
+    function renderDesktopNav() {
+      $('desktopNav').innerHTML = navItems.map(item => `
+        <button class="nav-link ${item.id === 'home' ? 'active' : ''}" data-jump="${item.id}" type="button">
+          <span class="icon">${item.icon}</span>
+          <span>${item.label}</span>
+        </button>
+      `).join('');
+
+      document.querySelectorAll('.nav-link').forEach(btn => {
+        btn.addEventListener('click', () => scrollToId(btn.dataset.jump));
+      });
+    }
+
+    function renderSubjects() {
+      const search = normalize($('subjectSearch').value);
+      const priority = $('priorityFilter').value;
+      const filtered = subjects.filter(subject => {
+        const searchOk = !search || normalize(subject.name).includes(search) || normalize(subject.short).includes(search);
+        const priorityOk = priority === 'toate' || subject.priority === priority;
+        return searchOk && priorityOk;
+      });
+
+      $('subjectGrid').innerHTML = filtered.map(subject => {
+        const active = state.selectedSubject === subject.id;
+        const progress = getSubjectProgress(subject.id);
+        return `
+          <button class="subject-card ${active ? 'active' : ''}" data-subject="${subject.id}" type="button">
+            <div class="subject-top">
+              <div class="subject-icon">${subject.icon}</div>
+              <span class="pill ${subject.priority === 'ridicată' ? 'warn' : 'success'}">${subject.level}</span>
+            </div>
+            <h4 style="margin:10px 0 6px;">${subject.short}</h4>
+            <p>${subject.name}</p>
+            <div class="progress"><span style="width:${progress}%"></span></div>
+            <div class="meta-row"><span>${progress}% progres</span><span>${subject.priority}</span></div>
+          </button>
+        `;
+      }).join('') || `<article class="card"><h4 style="margin:0 0 6px;">Nicio materie găsită</h4><p>Încearcă alt termen.</p></article>`;
+
+      document.querySelectorAll('[data-subject]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.selectedSubject = btn.dataset.subject;
+          const firstLesson = getLessonsForSubject(state.selectedSubject)[0];
+          if (firstLesson) state.selectedLessonId = firstLesson.id;
+          saveState();
+          renderAll();
+          setTab('lessons');
+        });
+      });
+    }
+
+    function renderLessons() {
+      const search = normalize($('lessonSearch').value);
+      const status = $('lessonStatusFilter').value;
+      const currentSubject = getSubjectById(state.selectedSubject);
+      $('currentSubjectLabel').textContent = currentSubject?.short || 'Materie';
+
+      const filtered = getLessonsForSubject(state.selectedSubject).filter(lesson => {
+        const done = state.completedLessons.includes(lesson.id);
+        const searchOk = !search || normalize(lesson.title).includes(search) || normalize(lesson.theory).includes(search);
+        const statusOk = status === 'toate' || (status === 'finalizate' && done) || (status === 'nefinalizate' && !done);
+        return searchOk && statusOk;
+      });
+
+      $('lessonGrid').innerHTML = filtered.map(lesson => {
+        const active = lesson.id === state.selectedLessonId;
+        const done = state.completedLessons.includes(lesson.id);
+        return `
+          <button class="lesson-card ${active ? 'active' : ''} ${done ? 'done' : ''}" data-lesson="${lesson.id}" type="button">
+            <div class="lesson-top">
+              <span class="tag">${lesson.level}</span>
+              <span class="pill">+${lesson.xp} XP</span>
+            </div>
+            <h4 style="margin:10px 0 6px;">${lesson.title}</h4>
+            <p>${lesson.theory.slice(0, 110)}...</p>
+            <div class="meta-row"><span>${currentSubject?.short || ''}</span><span>${done ? '✅ finalizată' : '▶ începe'}</span></div>
+          </button>
+        `;
+      }).join('') || `<article class="card"><h4 style="margin:0 0 6px;">Nicio lecție găsită</h4><p>Schimbă filtrul sau caută alt titlu.</p></article>`;
+
+      document.querySelectorAll('[data-lesson]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.selectedLessonId = Number(btn.dataset.lesson);
+          state.lessonView = 'theory';
+          saveState();
+          renderPlayer();
+          renderLessons();
+          setTab('player');
+        });
+      });
+    }
+
+    function renderPlayer() {
+      const lesson = getSelectedLesson();
+      const subject = getSubjectById(lesson.subject);
+      const content = state.lessonView === 'example' ? lesson.example : state.lessonView === 'hint' ? lesson.hint : lesson.theory;
+      const badge = state.lessonView === 'example' ? 'Exemplu' : state.lessonView === 'hint' ? 'Hint' : 'Teorie';
+
+      $('playerTitle').textContent = lesson.title;
+      $('playerMeta').textContent = `${subject?.short || ''} • ${lesson.level}`;
+      $('playerTheory').textContent = content;
+      $('playerStageBadge').textContent = badge;
+      $('studentAnswer').value = state.answerDrafts[String(lesson.id)] || '';
+      $('editLessonTitle').value = lesson.title;
+      $('editLessonTheory').value = lesson.theory;
+    }
+
+    function renderQuiz() {
+      const index = state.quizIndex % quiz.length;
+      const current = quiz[index];
+      const answered = state.answered.includes(index);
+      $('quizQuestion').textContent = current.question;
+      $('quizMeta').textContent = answered ? 'Ai răspuns deja la această întrebare.' : 'Alege varianta corectă.';
+      $('quizSubjectPill').textContent = current.subject;
+
+      $('quizOptions').innerHTML = current.options.map((option, i) => {
+        const classes = ['card'];
+        if (answered && i === current.answer) classes.push('active-exam');
+        return `<button class="${classes.join(' ')}" data-option="${i}" type="button" style="text-align:left; cursor:pointer;"><strong>${String.fromCharCode(65 + i)}.</strong> ${option}</button>`;
+      }).join('');
+
+      document.querySelectorAll('[data-option]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const chosen = Number(btn.dataset.option);
+          const currentIndex = state.quizIndex % quiz.length;
+          if (state.answered.includes(currentIndex)) return;
+          if (chosen === current.answer) {
+            state.quizScore += 1;
+            state.xp += 15;
+            showToast('Corect! Ai câștigat 15 XP.', 'success');
+          } else {
+            showToast('Răspuns greșit. Verifică varianta corectă.', 'warn');
+          }
+          state.answered.push(currentIndex);
+          markTodayActive(false);
+          saveState();
+          renderStats();
+          renderQuiz();
+          renderSidebarWidgets();
+        });
+      });
+    }
+
+    function renderPapers() {
+      const profile = $('paperProfileFilter').value;
+      const year = $('paperYearFilter').value;
+      const filtered = pastPapers.filter(paper => {
+        const okProfile = profile === 'toate' || paper.profile === profile;
+        const okYear = year === 'toate' || String(paper.year) === year;
+        return okProfile && okYear;
+      });
+
+      $('papersGrid').innerHTML = filtered.map(paper => {
+        const progress = state.paperProgress[String(paper.id)] || { status: 'de_făcut', favorite: false, notes: '' };
+        const statusLabel = progress.favorite ? 'favorit' : progress.status.replaceAll('_', ' ');
+        return `
+        <article class="card ${state.selectedPaperId === paper.id ? 'active-exam' : ''}">
+          <div class="card-top">
+            <div>
+              <h4 style="margin:0 0 6px;">${paper.title}</h4>
+              <p>${paper.subject} • profil ${paper.profile.toUpperCase()} • ${paper.type}</p>
+            </div>
+            <span class="pill warn">${paper.year}</span>
+          </div>
+          <p style="margin-top:10px;"><strong>Conținut:</strong> ${paper.tasks.join(' • ')}</p>
+          <p style="margin-top:8px;"><strong>Rezolvare:</strong> ${paper.solution}</p>
+          <p style="margin-top:8px;"><strong>Barem:</strong> ${paper.barem.join(' • ')}</p>
+          <div class="meta-row"><span>Status: ${statusLabel}</span><span>${progress.notes ? '📝 notițe' : '—'}</span></div>
+          <div class="hero-actions" style="margin-top:12px;">
+            <button class="btn btn-secondary" data-open-paper="${paper.id}" type="button">Deschide</button>
+            <button class="btn btn-ghost" data-toggle-paper-fav="${paper.id}" type="button">${progress.favorite ? '★ Favorit' : '☆ Favorit'}</button>
+          </div>
+        </article>
+      `;
+      }).join('') || `<article class="card"><h4 style="margin:0 0 6px;">Nicio variantă găsită</h4><p>Schimbă filtrul de profil sau anul.</p></article>`;
+
+      document.querySelectorAll('[data-open-paper]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.selectedPaperId = Number(btn.dataset.openPaper);
+          saveState();
+          renderPapers();
+          renderPaperWorkspace();
+          scrollToId('paperWorkspacePanel');
+        });
+      });
+
+      document.querySelectorAll('[data-toggle-paper-fav]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = String(btn.dataset.togglePaperFav);
+          const current = state.paperProgress[id] || { status: 'de_făcut', favorite: false, notes: '' };
+          state.paperProgress[id] = { ...current, favorite: !current.favorite };
+          saveState();
+          renderPapers();
+          renderPaperWorkspace();
+        });
+      });
+    }
+
+    function renderPaperWorkspace() {
+      const paper = pastPapers.find(p => p.id === state.selectedPaperId);
+      if (!paper) {
+        $('paperWorkspaceTitle').textContent = 'Selectează o variantă';
+        $('paperWorkspaceMeta').textContent = 'Aici apar materia, profilul și anul selectat.';
+        $('paperWorkspaceYear').textContent = '—';
+        $('paperWorkspaceStatus').textContent = 'Neselectat';
+        $('paperTasksView').textContent = 'Selectează o variantă pentru a vedea conținutul.';
+        $('paperBaremView').textContent = 'Baremul apare aici.';
+        $('paperSolutionView').textContent = 'Rezolvarea ghidată apare aici.';
+        $('paperNotes').value = '';
+        $('paperStatusSelect').value = 'de_făcut';
+        return;
+      }
+
+      const progress = state.paperProgress[String(paper.id)] || { status: 'de_făcut', favorite: false, notes: '' };
+      $('paperWorkspaceTitle').textContent = paper.title;
+      $('paperWorkspaceMeta').textContent = `${paper.subject} • profil ${paper.profile.toUpperCase()} • ${paper.type}`;
+      $('paperWorkspaceYear').textContent = String(paper.year);
+      $('paperWorkspaceStatus').textContent = progress.favorite ? 'Favorit' : progress.status.replaceAll('_', ' ');
+      $('paperTasksView').innerHTML = `<strong>Cerințe:</strong><br>${paper.tasks.map(task => `• ${task}`).join('<br>')}`;
+      $('paperBaremView').innerHTML = `<strong>Barem:</strong><br>${paper.barem.map(item => `• ${item}`).join('<br>')}`;
+      $('paperSolutionView').textContent = paper.solution;
+      $('paperNotes').value = progress.notes || '';
+      $('paperStatusSelect').value = progress.status || 'de_făcut';
+      $('togglePaperFavorite').textContent = progress.favorite ? '⭐ Elimină favorit' : '⭐ Favorite';
+    }
+
+    function populatePaperYears() {
+      $('paperYearFilter').innerHTML = ['toate', ...pastPapers.map(p => String(p.year))].map((year, index) => {
+        return `<option value="${year}">${index === 0 ? 'Toți anii' : year}</option>`;
+      }).join('');
+    }
+
+    function renderSimulations() {
+      $('simulationsGrid').innerHTML = simulations.map(sim => `
+        <article class="card ${state.activeExamId === sim.id ? 'active-exam' : ''}">
+          <div class="simulate-top">
+            <div>
+              <h4 style="margin:0 0 6px;">${sim.title}</h4>
+              <p>${sim.subject} • profil ${sim.profile.toUpperCase()}</p>
+            </div>
+            <span class="pill warn">${sim.duration} min</span>
+          </div>
+          <p style="margin-top:10px;">${sim.brief}</p>
+          <p style="margin-top:8px;"><strong>Dificultate:</strong> ${sim.difficulty}</p>
+          <div class="hero-actions" style="margin-top:12px;">
+            <button class="btn btn-secondary" data-pick-exam="${sim.id}" type="button">Selectează</button>
+          </div>
+        </article>
+      `).join('');
+
+      document.querySelectorAll('[data-pick-exam]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.activeExamId = Number(btn.dataset.pickExam);
+          const sim = simulations.find(s => s.id === state.activeExamId);
+          $('examTitle').textContent = sim.title;
+          $('examStatus').textContent = 'Pregătit să pornească.';
+          $('examDifficulty').textContent = sim.difficulty;
+          $('examProfile').textContent = `profil ${sim.profile.toUpperCase()}`;
+          $('examFeedbackHint').textContent = sim.feedback;
+          $('examAnswer').value = state.examDrafts[String(sim.id)] || '';
+          state.examRemainingSec = sim.duration * 60;
+          updateExamClock();
+          renderSimulations();
+          renderSidebarWidgets();
+        });
+      });
+    }
+
+    function generateClarification(question, lesson) {
+      const subject = getSubjectById(lesson.subject)?.short || 'materia curentă';
+      const cleanQ = question.trim() || `Explică lecția „${lesson.title}”`;
+
+      const explanationMap = {
+        romana: `Pe scurt, la ${subject}, cheia este să formulezi clar ideea centrală și să o susții coerent. Pentru „${lesson.title}”, pornești de la definiție, identifici trăsăturile și le legi de exemplu.` ,
+        matematica: `Pe scurt, la ${subject}, nu sari direct la rezultat. Pentru „${lesson.title}”, rezolvi în pași: ce știi, ce calculezi, cum interpretezi rezultatul.` ,
+        istorie: `La ${subject}, răspunsul bun are cronologie, context și relație cauză-efect. Pentru „${lesson.title}”, ordonează evenimentele și explică legăturile dintre ele.` ,
+        informatica: `La ${subject}, contează algoritmul înainte de cod. Pentru „${lesson.title}”, scrii ideea, pașii logici și apoi varianta de implementare.`
+      };
+
+      const explanation = explanationMap[lesson.subject] || `Pentru ${subject}, răspunsul trebuie simplificat în definiție, idee-cheie și aplicare.`;
+      return `Întrebare: ${cleanQ}\n\nExplicație simplificată:\n${explanation}\n\nAnalogie:\nGândește lecția ca pe un traseu scurt: întâi vezi harta, apoi urmezi reperele, abia la final verifici dacă ai ajuns la concluzia corectă.\n\n3 pași de recap:\n1. Spune lecția în 2 propoziții foarte simple.\n2. Dă un exemplu concret din lecție.\n3. Verifică dacă poți reproduce ideea fără să citești teoria.`;
+    }
+
+    function renderCalendar() {
+      const grid = $('calendarGrid');
+      const cursor = new Date(state.calendarCursor.getFullYear(), state.calendarCursor.getMonth(), 1);
+      const monthName = cursor.toLocaleDateString('ro-RO', { month: 'long', year: 'numeric' });
+      $('calendarLabel').textContent = monthName.charAt(0).toUpperCase() + monthName.slice(1);
+
+      const firstDay = new Date(cursor.getFullYear(), cursor.getMonth(), 1);
+      const startWeekday = (firstDay.getDay() + 6) % 7;
+      const daysInMonth = new Date(cursor.getFullYear(), cursor.getMonth() + 1, 0).getDate();
+      const prevMonthDays = new Date(cursor.getFullYear(), cursor.getMonth(), 0).getDate();
+      const weekdays = ['Lu', 'Ma', 'Mi', 'Jo', 'Vi', 'Sa', 'Du'];
+
+      const cells = [];
+      weekdays.forEach(day => cells.push(`<div class="weekday">${day}</div>`));
+
+      for (let i = 0; i < startWeekday; i++) {
+        const day = prevMonthDays - startWeekday + i + 1;
+        cells.push(`<div class="calendar-day outside"><strong>${day}</strong><span class="dot"></span></div>`);
+      }
+
+      const today = todayKey();
+      for (let day = 1; day <= daysInMonth; day++) {
+        const key = todayKey(new Date(cursor.getFullYear(), cursor.getMonth(), day));
+        const done = state.streakDays.includes(key);
+        const isToday = key === today;
+        cells.push(`<button class="calendar-day ${done ? 'done' : ''} ${isToday ? 'today' : ''}" data-day-key="${key}" type="button"><strong>${day}</strong><span class="dot"></span></button>`);
+      }
+
+      const totalRendered = startWeekday + daysInMonth;
+      const remaining = (7 - (totalRendered % 7)) % 7;
+      for (let i = 1; i <= remaining; i++) {
+        cells.push(`<div class="calendar-day outside"><strong>${i}</strong><span class="dot"></span></div>`);
+      }
+
+      grid.innerHTML = cells.join('');
+      grid.querySelectorAll('[data-day-key]').forEach(btn => {
+        btn.addEventListener('click', () => toggleDayActive(btn.dataset.dayKey));
+      });
+    }
+
+    function toggleDayActive(key) {
+      if (state.streakDays.includes(key)) {
+        state.streakDays = state.streakDays.filter(d => d !== key);
+        showToast('Ziua a fost debifată din progres.', 'info');
+      } else {
+        state.streakDays.push(key);
+        showToast('Zi marcată ca activă.', 'success');
+      }
+      state.streakDays.sort();
+      saveState();
+      renderCalendar();
+      renderStats();
+      renderSidebarWidgets();
+    }
+
+    function getCurrentStreak() {
+      const days = [...state.streakDays].sort();
+      if (!days.length) return 0;
+      let streak = 0;
+      let cursor = new Date();
+      for (;;) {
+        const key = todayKey(cursor);
+        if (days.includes(key)) {
+          streak += 1;
+          cursor.setDate(cursor.getDate() - 1);
+        } else if (streak === 0) {
+          cursor.setDate(cursor.getDate() - 1);
+          const yesterdayKey = todayKey(cursor);
+          if (days.includes(yesterdayKey)) {
+            streak += 1;
+            cursor.setDate(cursor.getDate() - 1);
+          }
+          break;
+        } else {
+          break;
+        }
+      }
+      return streak;
+    }
+
+    function markTodayActive(show = true) {
+      const key = todayKey();
+      if (!state.streakDays.includes(key)) state.streakDays.push(key);
+      state.streakDays = [...new Set(state.streakDays)].sort();
+      state.lastActiveDate = key;
+      saveState();
+      renderStats();
+      renderCalendar();
+      renderSidebarWidgets();
+      if (show) showToast('Ai marcat azi ca zi activă.', 'success');
+    }
+
+    function renderStats() {
+      $('statLessons').textContent = state.completedLessons.length;
+      $('totalLessons').textContent = getLessons().length;
+      $('statQuiz').textContent = state.quizScore;
+      $('totalQuiz').textContent = quiz.length;
+      $('statXP').textContent = state.xp;
+      $('statXPLabel').textContent = getLevelLabel();
+      $('statStreak').textContent = getCurrentStreak();
+      $('streakText').textContent = getCurrentStreak();
+      $('xpChip').textContent = `✨ ${state.xp} XP`;
+      $('todayChip').textContent = `🔥 streak ${getCurrentStreak()}`;
+      $('streakHint').textContent = getCurrentStreak() > 0 ? 'Ții ritmul bine. Continuă și mâine.' : 'Marchează azi ca zi activă și începe un nou streak.';
+    }
+
+    function renderSidebarWidgets() {
+      const subject = getSubjectById(state.selectedSubject)?.short || 'materia curentă';
+      const lesson = getSelectedLesson();
+      $('sidebarFocus').textContent = `Continuă cu „${lesson.title}” la ${subject}.`;
+      $('sidebarPomodoro').textContent = `${state.pomodoroSessions} sesiuni finalizate`;
+      $('sidebarExam').textContent = state.activeExamId ? simulations.find(s => s.id === state.activeExamId)?.title || 'Simulare selectată' : 'Nu rulează nicio simulare.';
+      $('focusRecommendation').textContent = `În sesiunea următoare, lucrează la „${lesson.title}”, apoi fă 1 întrebare de quiz și o recapitulare de 2 minute.`;
+    }
+
+    function savePlanner() {
+      localStorage.setItem(STORAGE_KEYS.dailyGoal, $('dailyGoal').value);
+      localStorage.setItem(STORAGE_KEYS.quickNotes, $('quickNotes').value);
+    }
+
+    function loadPlanner() {
+      $('dailyGoal').value = localStorage.getItem(STORAGE_KEYS.dailyGoal) || '';
+      $('quickNotes').value = localStorage.getItem(STORAGE_KEYS.quickNotes) || '';
+    }
+
+    function saveAnswerDraft() {
+      const lesson = getSelectedLesson();
+      state.answerDrafts[String(lesson.id)] = $('studentAnswer').value;
+      saveState();
+    }
+
+    function saveExamDraft() {
+      if (!state.activeExamId) return;
+      state.examDrafts[String(state.activeExamId)] = $('examAnswer').value;
+      saveState();
+    }
+
+    function completeLesson() {
+      const lesson = getSelectedLesson();
+      if (state.completedLessons.includes(lesson.id)) {
+        showToast('Lecția este deja finalizată.', 'info');
+        return;
+      }
+      state.completedLessons.push(lesson.id);
+      state.xp += lesson.xp;
+      markTodayActive(false);
+      saveState();
+      renderLessons();
+      renderStats();
+      renderSidebarWidgets();
+      showToast(`Ai finalizat „${lesson.title}” și ai câștigat ${lesson.xp} XP.`, 'success');
+    }
+
+    function goToPrevLesson() {
+      const list = getLessonsForSubject(state.selectedSubject);
+      const idx = list.findIndex(l => l.id === state.selectedLessonId);
+      if (idx > 0) {
+        state.selectedLessonId = list[idx - 1].id;
+        state.lessonView = 'theory';
+        saveState();
+        renderLessons();
+        renderPlayer();
+      }
+    }
+
+    function goToNextLesson() {
+      const list = getLessonsForSubject(state.selectedSubject);
+      const idx = list.findIndex(l => l.id === state.selectedLessonId);
+      if (idx >= 0 && idx < list.length - 1) {
+        state.selectedLessonId = list[idx + 1].id;
+        state.lessonView = 'theory';
+        saveState();
+        renderLessons();
+        renderPlayer();
+      }
+    }
+
+    function saveLessonEdit() {
+      const lesson = getSelectedLesson();
+      const newTitle = $('editLessonTitle').value.trim();
+      const newTheory = $('editLessonTheory').value.trim();
+      state.editedLessons[String(lesson.id)] = {
+        ...(state.editedLessons[String(lesson.id)] || {}),
+        title: newTitle || lesson.title,
+        theory: newTheory || lesson.theory
+      };
+      saveState();
+      renderAll();
+      showToast('Modificările lecției au fost salvate local.', 'success');
+    }
+
+    function resetLessonEdit() {
+      const lesson = getSelectedLesson();
+      delete state.editedLessons[String(lesson.id)];
+      saveState();
+      renderAll();
+      showToast('Lecția a revenit la varianta originală.', 'info');
+    }
+
+    function nextQuiz() {
+      state.quizIndex = (state.quizIndex + 1) % quiz.length;
+      saveState();
+      renderQuiz();
+    }
+
+    function resetQuiz() {
+      state.quizIndex = 0;
+      state.quizScore = 0;
+      state.answered = [];
+      saveState();
+      renderQuiz();
+      renderStats();
+      showToast('Quiz-ul a fost resetat.', 'info');
+    }
+
+    function updatePomodoroDisplay() {
+      const total = Math.max(state.pomodoro.totalSec, 1);
+      const ratio = (1 - state.pomodoro.remainingSec / total) * 100;
+      $('pomodoroRing').style.setProperty('--ring', `${Math.max(0, Math.min(100, ratio))}%`);
+      const min = String(Math.floor(state.pomodoro.remainingSec / 60)).padStart(2, '0');
+      const sec = String(state.pomodoro.remainingSec % 60).padStart(2, '0');
+      $('pomodoroTime').textContent = `${min}:${sec}`;
+      $('pomodoroMode').textContent = state.pomodoro.isBreak ? 'Pauză scurtă' : 'Sesiune de studiu';
+      $('pomodoroTag').textContent = state.pomodoro.isBreak ? 'Break' : 'Work';
+      $('pomodoroSessions').textContent = state.pomodoroSessions;
+      $('pomodoroMinutesDone').textContent = state.pomodoroMinutesDone;
+      $('pomodoroCycle').textContent = state.pomodoro.cycle;
+    }
+
+    function resetPomodoroValues() {
+      const work = Math.max(5, Number($('workMinutes').value || 25));
+      state.pomodoro.totalSec = work * 60;
+      state.pomodoro.remainingSec = work * 60;
+      state.pomodoro.isBreak = false;
+      updatePomodoroDisplay();
+    }
+
+    function stopPomodoroInterval() {
+      if (state.pomodoro.interval) clearInterval(state.pomodoro.interval);
+      state.pomodoro.interval = null;
+      state.pomodoro.isRunning = false;
+    }
+
+    function switchPomodoroMode() {
+      if (state.pomodoro.isBreak) {
+        state.pomodoro.isBreak = false;
+        state.pomodoro.cycle += 1;
+        const work = Math.max(5, Number($('workMinutes').value || 25));
+        state.pomodoro.totalSec = work * 60;
+        state.pomodoro.remainingSec = work * 60;
+        showToast('Pauza s-a încheiat. Începe următoarea sesiune.', 'info');
+      } else {
+        state.pomodoro.isBreak = true;
+        const br = Math.max(1, Number($('breakMinutes').value || 5));
+        state.pomodoro.totalSec = br * 60;
+        state.pomodoro.remainingSec = br * 60;
+        state.pomodoroSessions += 1;
+        state.pomodoroMinutesDone += Math.max(5, Number($('workMinutes').value || 25));
+        markTodayActive(false);
+        saveState();
+        showToast('Sesiune terminată. Ia o pauză scurtă.', 'success');
+      }
+      renderSidebarWidgets();
+      updatePomodoroDisplay();
+    }
+
+    function startPomodoro() {
+      if (!state.pomodoro.interval) {
+        if (!state.pomodoro.remainingSec || state.pomodoro.remainingSec < 1) resetPomodoroValues();
+        state.pomodoro.isRunning = true;
+        state.pomodoro.interval = setInterval(() => {
+          state.pomodoro.remainingSec -= 1;
+          if (state.pomodoro.remainingSec <= 0) {
+            switchPomodoroMode();
+          }
+          updatePomodoroDisplay();
+        }, 1000);
+      }
+    }
+
+    function pausePomodoro() {
+      stopPomodoroInterval();
+      updatePomodoroDisplay();
+    }
+
+    function skipPomodoro() {
+      switchPomodoroMode();
+    }
+
+    function resetPomodoro() {
+      stopPomodoroInterval();
+      state.pomodoro.cycle = 1;
+      resetPomodoroValues();
+      showToast('Pomodoro a fost resetat.', 'info');
+    }
+
+    function updateExamClock() {
+      const total = Math.max(0, state.examRemainingSec);
+      const min = String(Math.floor(total / 60)).padStart(2, '0');
+      const sec = String(total % 60).padStart(2, '0');
+      $('examClock').textContent = `${min}:${sec}`;
+    }
+
+    function startExam() {
+      if (!state.activeExamId) {
+        showToast('Selectează mai întâi o simulare.', 'warn');
+        return;
+      }
+      if (state.examRunning) return;
+      const sim = simulations.find(s => s.id === state.activeExamId);
+      if (!sim) return;
+      if (!state.examRemainingSec) state.examRemainingSec = sim.duration * 60;
+      state.examRunning = true;
+      $('examStatus').textContent = 'Simularea rulează acum.';
+      state.examInterval = setInterval(() => {
+        state.examRemainingSec -= 1;
+        if (state.examRemainingSec <= 0) {
+          finishExam(true);
+        }
+        updateExamClock();
+      }, 1000);
+      renderSidebarWidgets();
+      showToast('Simularea a început.', 'info');
+    }
+
+    function finishExam(auto = false) {
+      if (state.examInterval) clearInterval(state.examInterval);
+      state.examInterval = null;
+      state.examRunning = false;
+      const sim = simulations.find(s => s.id === state.activeExamId);
+      if (!sim) return;
+      const words = $('examAnswer').value.trim().split(/\s+/).filter(Boolean).length;
+      const feedback = words > 110 ? 'răspuns consistent' : words > 40 ? 'răspuns decent, dar mai poate fi dezvoltat' : 'răspuns prea scurt';
+      $('examStatus').textContent = auto ? 'Timpul s-a încheiat.' : `Ai finalizat: ${feedback}.`;
+      markTodayActive(false);
+      saveExamDraft();
+      renderSidebarWidgets();
+      showToast(auto ? 'Timpul s-a terminat.' : 'Simularea a fost încheiată.', auto ? 'warn' : 'success');
+    }
+
+    function resetExam() {
+      if (state.examInterval) clearInterval(state.examInterval);
+      state.examInterval = null;
+      state.examRunning = false;
+      if (state.activeExamId) {
+        const sim = simulations.find(s => s.id === state.activeExamId);
+        state.examRemainingSec = sim ? sim.duration * 60 : 0;
+      } else {
+        state.examRemainingSec = 0;
+      }
+      $('examAnswer').value = state.activeExamId ? (state.examDrafts[String(state.activeExamId)] || '') : '';
+      $('examStatus').textContent = 'Timer resetat. Poți porni din nou.';
+      updateExamClock();
+      showToast('Simularea a fost resetată.', 'info');
+    }
+
+    function renderAll() {
+      renderSubjects();
+      renderLessons();
+      renderPlayer();
+      renderQuiz();
+      renderPapers();
+      renderPaperWorkspace();
+      renderSimulations();
+      renderCalendar();
+      renderStats();
+      renderSidebarWidgets();
+      loadPlanner();
+      updatePomodoroDisplay();
+    }
+
+    function wireEvents() {
+      renderDesktopNav();
+
+      document.querySelectorAll('.mobile-nav-btn').forEach(btn => btn.addEventListener('click', () => scrollToId(btn.dataset.jump)));
+      document.querySelectorAll('[data-jump]').forEach(btn => btn.addEventListener('click', () => scrollToId(btn.dataset.jump)));
+
+      $('themeToggle').addEventListener('click', () => {
+        const next = document.body.dataset.theme === 'light' ? 'dark' : 'light';
+        updateTheme(next);
+      });
+
+      $('subjectSearch').addEventListener('input', renderSubjects);
+      $('priorityFilter').addEventListener('change', renderSubjects);
+      $('lessonSearch').addEventListener('input', renderLessons);
+      $('lessonStatusFilter').addEventListener('change', renderLessons);
+      $('paperProfileFilter').addEventListener('change', () => {
+        renderPapers();
+        renderSimulations();
+      });
+      $('paperYearFilter').addEventListener('change', renderPapers);
+      $('studentAnswer').addEventListener('input', saveAnswerDraft);
+      $('dailyGoal').addEventListener('input', savePlanner);
+      $('quickNotes').addEventListener('input', savePlanner);
+      $('examAnswer').addEventListener('input', saveExamDraft);
+
+      document.querySelectorAll('.tab').forEach(tab => {
+        if (tab.dataset.tab) {
+          tab.addEventListener('click', () => setTab(tab.dataset.tab));
+        }
+      });
+
+      document.querySelectorAll('[data-paper-tab]').forEach(tab => {
+        tab.addEventListener('click', () => {
+          document.querySelectorAll('[data-paper-tab]').forEach(item => item.classList.toggle('active', item.dataset.paperTab === tab.dataset.paperTab));
+          document.querySelectorAll('[data-paper-panel]').forEach(panel => panel.classList.toggle('active', panel.dataset.paperPanel === tab.dataset.paperTab));
+        });
+      });
+
+      $('toggleExample').addEventListener('click', () => {
+        state.lessonView = state.lessonView === 'example' ? 'theory' : 'example';
+        saveState();
+        renderPlayer();
+      });
+
+      $('showHint').addEventListener('click', () => {
+        state.lessonView = state.lessonView === 'hint' ? 'theory' : 'hint';
+        saveState();
+        renderPlayer();
+      });
+
+      $('prevLesson').addEventListener('click', goToPrevLesson);
+      $('nextLesson').addEventListener('click', goToNextLesson);
+      $('completeLesson').addEventListener('click', completeLesson);
+      $('saveLessonEdit').addEventListener('click', saveLessonEdit);
+      $('resetLessonEdit').addEventListener('click', resetLessonEdit);
+
+      $('nextQuiz').addEventListener('click', nextQuiz);
+      $('resetQuiz').addEventListener('click', resetQuiz);
+
+      $('markTodayDone').addEventListener('click', () => markTodayActive(true));
+      $('openPaperWorkspace').addEventListener('click', () => scrollToId('paperWorkspacePanel'));
+      $('savePaperStatus').addEventListener('click', () => {
+        if (!state.selectedPaperId) {
+          showToast('Selectează mai întâi o variantă.', 'warn');
+          return;
+        }
+        const id = String(state.selectedPaperId);
+        const current = state.paperProgress[id] || { status: 'de_făcut', favorite: false, notes: '' };
+        state.paperProgress[id] = {
+          ...current,
+          status: $('paperStatusSelect').value,
+          notes: $('paperNotes').value
+        };
+        saveState();
+        renderPapers();
+        renderPaperWorkspace();
+        markTodayActive(false);
+        showToast('Statusul variantei a fost salvat.', 'success');
+      });
+      $('togglePaperFavorite').addEventListener('click', () => {
+        if (!state.selectedPaperId) {
+          showToast('Selectează mai întâi o variantă.', 'warn');
+          return;
+        }
+        const id = String(state.selectedPaperId);
+        const current = state.paperProgress[id] || { status: 'de_făcut', favorite: false, notes: '' };
+        state.paperProgress[id] = { ...current, favorite: !current.favorite, notes: $('paperNotes').value, status: $('paperStatusSelect').value };
+        saveState();
+        renderPapers();
+        renderPaperWorkspace();
+      });
+      $('clearPaperNotes').addEventListener('click', () => {
+        if (!state.selectedPaperId) return;
+        $('paperNotes').value = '';
+        const id = String(state.selectedPaperId);
+        const current = state.paperProgress[id] || { status: 'de_făcut', favorite: false, notes: '' };
+        state.paperProgress[id] = { ...current, notes: '' };
+        saveState();
+        renderPapers();
+        renderPaperWorkspace();
+        showToast('Notițele au fost șterse.', 'info');
+      });
+      $('prevMonth').addEventListener('click', () => {
+        state.calendarCursor = new Date(state.calendarCursor.getFullYear(), state.calendarCursor.getMonth() - 1, 1);
+        renderCalendar();
+      });
+      $('nextMonth').addEventListener('click', () => {
+        state.calendarCursor = new Date(state.calendarCursor.getFullYear(), state.calendarCursor.getMonth() + 1, 1);
+        renderCalendar();
+      });
+
+      $('startPomodoro').addEventListener('click', startPomodoro);
+      $('pausePomodoro').addEventListener('click', pausePomodoro);
+      $('resetPomodoro').addEventListener('click', resetPomodoro);
+      $('skipPomodoro').addEventListener('click', skipPomodoro);
+      $('workMinutes').addEventListener('change', resetPomodoroValues);
+      $('breakMinutes').addEventListener('change', updatePomodoroDisplay);
+
+      $('openExamChecklist').addEventListener('click', () => $('examModal').classList.add('open'));
+      $('closeExamModal').addEventListener('click', () => $('examModal').classList.remove('open'));
+      $('startExamFromModal').addEventListener('click', () => {
+        $('examModal').classList.remove('open');
+        startExam();
+      });
+      $('startExam').addEventListener('click', startExam);
+      $('finishExam').addEventListener('click', () => finishExam(false));
+      $('resetExam').addEventListener('click', resetExam);
+
+      $('generateClarify').addEventListener('click', () => {
+        const lesson = getSelectedLesson();
+        const answer = generateClarification($('clarifyQuestion').value, lesson);
+        $('clarifyResponse').textContent = answer;
+        $('clarifyMeta').textContent = `Explicație generată pentru „${lesson.title}”.`;
+        showToast('Clarificarea a fost generată.', 'success');
+      });
+
+      $('insertClarifyPrompt').addEventListener('click', () => {
+        const lesson = getSelectedLesson();
+        const answer = generateClarification($('clarifyQuestion').value, lesson);
+        $('studentAnswer').value = answer;
+        saveAnswerDraft();
+        setTab('player');
+        showToast('Clarificarea a fost pusă în editor.', 'info');
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+          event.preventDefault();
+          $('subjectSearch').focus();
+          setTab('subjects');
+        }
+      });
+    }
+
+    populatePaperYears();
+    updateTheme(localStorage.getItem(STORAGE_KEYS.theme) || 'dark');
+    wireEvents();
+    resetPomodoroValues();
+    renderAll();
+    updateExamClock();
+  </script>
+</body>
+</html>
